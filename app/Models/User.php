@@ -50,6 +50,12 @@ class User extends Authenticatable
         return 'login';
     }
 
+    // Relationship with Prestataire
+    public function prestataire()
+    {
+        return $this->belongsTo(Prestataire::class, 'presta');
+    }
+
     /**
      * Get the unique identifier for the user.
      */
@@ -88,12 +94,6 @@ class User extends Authenticatable
     public function getRememberTokenName()
     {
         return null;
-    }
-
-    // Relationship with Prestataire
-    public function prestataire()
-    {
-        return $this->belongsTo(Prestataire::class, 'presta');
     }
 
     // Relationship with Intervention (as technicien)
