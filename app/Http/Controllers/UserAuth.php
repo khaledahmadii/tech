@@ -12,7 +12,7 @@ class UserAuth extends Controller
 
     if (Auth::attempt($credentials)) {
         // ✅ login réussi
-        $request->session()->regenerate(); // important (anti session fixation)
+        $request->session()->regenerate();
 
         return redirect()->intended('/');
     }
@@ -22,4 +22,13 @@ class UserAuth extends Controller
         'login' => 'Nom d\'utilisateur ou mot de passe incorrect',
     ]);
 }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return redirect()->intended('/login');
+    }
 }

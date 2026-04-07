@@ -13,6 +13,7 @@ class dash extends Controller
     public function index()
     {
 
+
         $current_month = now()->month;
         $current_year = now()->year;
         $current_day = now()->day;
@@ -40,12 +41,14 @@ class dash extends Controller
         });
 
         $monthly_interventions = Cache::remember('monthly_interventions', 600, function () {
-            return DB::select("SELECT DATE_FORMAT(i.date_int, '%Y-%m') AS mois, COUNT(i.id) AS total
-                FROM intervention i
-                WHERE i.date_int >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
-                GROUP BY mois   
-                ORDER BY mois ASC");
+            return Intervention::selectRaw("DATE_FORMAT(date_int, '%Y-%m') AS mois, COUNT(id) AS total")
+                ->where('date_int', '>=', now()->subMonths(6))
+                ->groupBy('mois')
+                ->orderBy('mois', 'asc')
+                ->get()
+                ->toArray();
         });
+
         //dd($monthly_interventions, $interventions_par_racc, $technicians_count, $interventions_this_year, $interventions_this_month);
         return view('index', compact('interventions_this_month', 'interventions_this_year', 'technicians_count', 'interventions_par_racc', 'monthly_interventions', 'interventions_this_day'));
     }
