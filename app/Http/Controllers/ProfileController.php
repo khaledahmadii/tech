@@ -8,16 +8,27 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\User;
+use App\Models\Prestataire;
 
 class ProfileController extends Controller
 {
     /**
      * Display the user's profile form.
      */
+
+
+    public function index()
+    {   
+        $users = User::all();
+        $presta = Prestataire::all();
+        return view('profile.index', compact('users', 'presta'));
+    }
     public function edit(Request $request): View
     {
         return view('profile.edit', [
             'user' => $request->user(),
+            'presta' => Presta::all(),
         ]);
     }
 
@@ -40,21 +51,11 @@ class ProfileController extends Controller
     /**
      * Delete the user's account.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy($id)
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
 
-        $user = $request->user();
 
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        user::destroy($id);
+        return redirect()->back()->with('success', 'Compte supprimée avec succès');
     }
 }

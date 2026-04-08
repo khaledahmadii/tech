@@ -29,6 +29,7 @@ class interv extends Controller
             )
             ->orderBy('intervention.date_int', 'DESC')
             ->get();
+            
         $tech_list = User::all();
         $racc = Racc::all();
         return view('intervention.index', compact('techs', 'racc', 'tech_list'));
