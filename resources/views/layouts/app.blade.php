@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title>ISKA | Connect</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }} ">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
@@ -26,7 +26,6 @@
   <!-- summernote -->
   <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
   @yield('styles')
-  @yield('style')
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -58,7 +57,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="/dash" class="brand-link">
       <img src="dist/img/logo.jpg" alt="ISKA connect Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">ISKA connect</span>
     </a>
@@ -84,7 +83,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
+            <a href="/dash" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -92,7 +91,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
+            <a href="/interv" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Interventions
@@ -124,7 +123,7 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="/compte" class="nav-link">
               <i class="nav-icon fas fa-clipboard"></i>
               <p>
                 Comptes
@@ -141,13 +140,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/layout/top-nav.html" class="nav-link">
+                <a href="/racc" class="nav-link">
                   <i class="fa fa-list nav-icon"></i>
                   <p>Raccordement</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
+                <a href="/tarif" class="nav-link">
                   <i class="fa fa-book nav-icon"></i>
                   <p>Tarifs</p>
                 </a>
@@ -187,6 +186,8 @@
 <script>
   $.widget.bridge('uibutton', $.ui.button)
 </script>
+@yield('scripts')
+
 <!-- Bootstrap 4 -->
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- ChartJS -->
@@ -214,7 +215,5 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
 <!-- Child page scripts - loaded AFTER jQuery -->
-@yield('scripts')
-@yield('script')
 </body>
 </html> 

@@ -4,13 +4,14 @@
   <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
   <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endsection
+@if (session('success'))
+    <div class="alert alert-success  alert-dismissible fade show position-fixed p-2" role="alert" style="top: 1rem; right: 1rem; min-width: 250px; max-width: 320px; z-index: 1060; box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);">
+        {{ session('success') }}
+    </div>
+@endif
 @section('content')
 
-@if (session('success'))
-    <script>
-        alert("{{ session('success') }}");
-    </script>
-@endif
+
 <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Liste des interventions</h3>
@@ -160,8 +161,12 @@
                             <!-- Champ texte caché par défaut, affiché si checkbox cochée -->
                             <div class="col-md-6 mb-3" id="extraInputContainer" style="display: none;">
                                 <label for="extra_input" class="form-label">Grille</label>
-                                <input type="text" class="form-control" id="extra_input" name="notre" placeholder="Saisir le détail">
-                            </div>
+                                    <select class="form-select form-control" id="notre" name="notre">
+                                    @foreach($tech_list as $t)
+                                    <option value="{{ $t->id }}">{{ $t->nom }} {{ $t->prenom }}</option>
+                                    @endforeach                            
+                                    </select>    
+                                  </div>
                             
                         </div>
                         
@@ -280,6 +285,14 @@
         $('#extra_input').removeAttr('required').val('');
       }
     });
+
+    // Fermeture automatique de l'alerte success après 4 secondes
+    setTimeout(function() {
+      $('.alert.alert-success').fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove();
+      });
+    }, 1000);
+    
   });
 </script>
 @endsection

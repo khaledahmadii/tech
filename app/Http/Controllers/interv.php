@@ -14,13 +14,14 @@ class interv extends Controller
     public static function getAll() {
         $techs = Intervention::join('user', 'intervention.technicien', '=', 'user.id')
             ->join('racc', 'intervention.type_rac', '=', 'racc.id')
+            ->join('user as t', 'intervention.notre', '=', 't.id', 'left')
             ->select(
                 'intervention.id as intervention_id',
                 'user.id as technicien_id',
                 'intervention.type_rac',
                 'intervention.jeton',
                 'intervention.heure',
-                'intervention.notre as notre_grille',
+                DB::raw("CASE WHEN intervention.notre LIKE '%non%' THEN 'non' WHEN t.id IS NOT NULL THEN CONCAT(t.nom, ' ', t.prenom) ELSE intervention.notre END AS notre_grille"),
                 'intervention.valid',
                 'intervention.date_int',
                 'user.nom as technicien_nom',
@@ -70,16 +71,12 @@ class interv extends Controller
             'type_rac' => 'nullable|integer|exists:racc,id',
             'jeton' => 'nullable|string|max:255',
             'heure' => 'nullable|string|max:255',
-            'notre' => 'nullable|string|max:255',
-            'valid' => 'nullable|in:oui,non',
         ]);
 
         Intervention::where('id', $request->id)->update([
             'type_rac' => $request->type_rac,
             'jeton' => $request->jeton,
             'heure' => $request->heure,
-            'notre' => $request->notre,
-            'valid' => $request->valid,
         ]);
 
         return redirect()->back()->with('success', 'Intervention modifiée avec succès');

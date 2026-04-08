@@ -7,9 +7,9 @@
 @section('content')
 
 @if (session('success'))
-    <script>
-        alert("{{ session('success') }}");
-    </script>
+    <div class="alert alert-success alert-dismissible fade show position-fixed p-2" role="alert" style="top: 1rem; right: 1rem; min-width: 250px; max-width: 320px; z-index: 1060; box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);">
+        {{ session('success') }}
+    </div>
 @endif
 <div class="card">
               <div class="card-header">
@@ -21,52 +21,52 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>Nom</th>
-                    <th>Prenom</th>
-                    <th>Nom d'utilisateur</th>
-                    <th>Prestataire</th>
-                    <th>Type</th>
-                    <th>Actions</th>
-
-                  </tr>
-                  </thead>
-                  <tbody>
-                    @foreach($users as $user)
-                  <tr>
-                    <td>{{ $user->nom }}</td>
-                    <td>{{ $user->prenom }}</td>
-                    <td>{{ $user->login }}</td>
-                    <td>{{ $user->prestataire->nom }}</td>
-                    <td>{{ $user->role }}</td>
-                    <td>
-                      <button type="button" class="btn btn-sm btn-primary edit-compte" data-toggle="modal" data-target="#modal-edit"
-                        data-id="{{ $user->id }}"
-                        data-nom="{{ $user->nom }}"
-                        data-prenom="{{ $user->prenom }}"
-                        data-login="{{ $user->login }}"
-                        data-prestataire="{{ $user->presta }}"
-                        data-role="{{ $user->role }}"
-                      >
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <a class="btn btn-sm btn-danger" href="{{ route('compte.delete', $user->id) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette intervention ?')"><i class="fas fa-trash"></i></a>
-                    </td>   
-                  </tr>
-                  @endforeach
-                  </tbody>
-                  </tfoot>
-
-                  <tr>
-                    <th>Nom</th>
-                    <th>Prenom</th>
-                    <th>Nom d'utilisateur</th>
-                    <th>Prestataire</th>
-                    <th>Type</th>
-                    <th>Actions</th>
-                  </tr>
-                  </tfoot>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prenom</th>
+                            <th>Nom d'utilisateur</th>
+                            <th>Prestataire</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($users as $user)
+                        <tr>
+                            <td>{{ $user->nom }}</td>
+                            <td>{{ $user->prenom }}</td>
+                            <td>{{ $user->login }}</td>
+                            <td>{{ $user->prestataire->nom }}</td>
+                            <td>{{ $user->role }}</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-primary edit-compte" data-toggle="modal" data-target="#modal-edit"
+                                    data-id="{{ $user->id }}"
+                                    data-nom="{{ $user->nom }}"
+                                    data-prenom="{{ $user->prenom }}"
+                                    data-login="{{ $user->login }}"
+                                    data-presta="{{ $user->presta }}"
+                                    data-role="{{ $user->role }}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <a class="btn btn-sm btn-danger" href="{{ route('compte.delete', $user->id) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette intervention ?')">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <!-- Optionnel : tfoot si vous voulez un pied de tableau -->
+                    <tfoot>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prenom</th>
+                            <th>Nom d'utilisateur</th>
+                            <th>Prestataire</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->
@@ -87,7 +87,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('intervention.add') }}">
+                    <form method="POST" action="{{ route('compte.add') }}">
                         @csrf
                         <div class="row">
 
@@ -111,14 +111,18 @@
                                     @endforeach
                                 </select>
                             </div>
-                                                        <div class="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3">
                                <label for="title" class="form-label">Type</label>
                                 <select class="form-select form-control" id="role" name="role" required>
-                                        <option value="admin">Administrateur</option>
-                                        <option value="auto">auto-entrepreneur</option>
+                                        <option value="Administrateur">Administrateur</option>
+                                        <option value="auto-entrepreneur">auto-entrepreneur</option>
                                         <option value="salarie">Salarié</option>
                                 </select>
 
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="title" class="form-label">Mot de passe</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
                             </div>
 
 
@@ -142,12 +146,12 @@
               <div class="modal-dialog modal-md">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h4 class="modal-title">Modifier l'intervention</h4>
+                    <h4 class="modal-title">Modifier le compte</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <form id="editInterventionForm" action="{{ route('intervention.update') }}" method="POST">
+                  <form id="editInterventionForm" action="{{ route('compte.update') }}" method="POST">
                     @csrf
                     <input type="hidden" name="id" id="edit-compte-id">
                     <div class="modal-body">
@@ -178,9 +182,9 @@
                         <label for="edit-role">Rôle</label>
                         <div class="input-group">
                           <select class="form-select form-control" id="edit-role" name="role" required>
-                                        <option value="admin">Administrateur</option>
-                                        <option value="auto">auto-entrepreneur</option>
-                                        <option value="salarie">Salarié</option>
+                                        <option value="Administrateur">Administrateur</option>
+                                        <option value="auto-entrepreneur">auto-entrepreneur</option>
+                                        <option value="salarie">Salarie</option>
                           </select>
                         </div>
                       </div>
@@ -190,6 +194,7 @@
 
                     </div>
                     <div class="modal-footer justify-content-between">
+                      <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-password">Modifier mot de passe</button>
                       <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
                       <button type="submit" class="btn btn-primary">Enregistrer</button>
                     </div>
@@ -201,8 +206,41 @@
             </div>
             <!-- /.modal -->
 
+<!-- Modal de changement de mot de passe -->
+            <div class="modal fade" id="modal-password">
+              <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Changer le mot de passe</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <form action="{{ route('compte.updatePassword') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="id" id="password-compte-id">
+                    <div class="modal-body">
+                      <div class="form-group">
+                        <label for="new-password">Nouveau mot de passe</label>
+                        <input type="password" class="form-control" id="new-password" name="password" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="confirm-password">Confirmer le mot de passe</label>
+                        <input type="password" class="form-control" id="confirm-password" name="password_confirmation" required>
+                      </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                      <button type="submit" class="btn btn-primary">Changer</button>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
 @endsection
-
 @section('scripts')
 <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -223,18 +261,22 @@
       "responsive": true, 
       "lengthChange": false, 
       "autoWidth": false,
-      "order": [[6, 'desc']],
+      "order": [[0, 'asc']],
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-    $('.edit-intervention').on('click', function () {
+    $('.edit-compte').on('click', function () {
       var button = $(this);
       $('#edit-compte-id').val(button.data('id'));
       $('#edit-login').val(button.data('login'));
       $('#edit-nom').val(button.data('nom'));
-      $('#edit-prenom').val(button.data('prenom')).trigger('change');
-      $('#edit-prestataire').val(button.data('prestataire')).trigger('change');
-      $('#edit-role').val(button.data('role'));
+      $('#edit-prenom').val(button.data('prenom'));
+      $('#edit-presta').val(button.data('presta')).trigger('change');
+      $('#edit-role').val(button.data('role')).trigger('change');
+    });
+
+    $('#modal-password').on('show.bs.modal', function () {
+      $('#password-compte-id').val($('#edit-compte-id').val());
     });
 
 
@@ -247,6 +289,13 @@
         $('#extra_input').removeAttr('required').val('');
       }
     });
+    setTimeout(function() {
+      $('.alert.alert-success').fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove();
+      });
+    }, 500);
+
+
   });
 </script>
 @endsection

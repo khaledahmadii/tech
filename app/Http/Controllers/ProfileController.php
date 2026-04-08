@@ -24,28 +24,54 @@ class ProfileController extends Controller
         $presta = Prestataire::all();
         return view('profile.index', compact('users', 'presta'));
     }
+
+    public function create()
+    {
+        $users = User::create([
+            'nom' => request('nom'),
+            'prenom' => request('prenom'),
+            'login' => request('login'),
+            'presta' => request('presta'),
+            'role' => request('role'),
+            'password' => bcrypt(request('password')),
+        ]);
+        return redirect()->back()->with('success', 'Compte créé avec succès');
+    }
     public function edit(Request $request): View
     {
         return view('profile.edit', [
             'user' => $request->user(),
-            'presta' => Presta::all(),
         ]);
     }
 
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(request $request)
+    {   
+        $user = user::where('id', request('id'))->first()
+        ->update([
+            'nom' => request('nom'),
+            'prenom' => request('prenom'),
+            'login' => request('login'),
+            'presta' => request('presta'),
+            'role' => request('role'),
+        ]);
+        return redirect()->back()->with('success', 'Compte mis à jour avec succès');
+    }
+
+    public function updatePassword(Request $request)
     {
-        $request->user()->fill($request->validated());
+        $request->validate([
+            'id' => 'required|integer|exists:user,id',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
+        $user = User::find($request->id);
+        $user->password = bcrypt($request->password);
+        $user->save();
 
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->back()->with('success', 'Mot de passe changé avec succès');
     }
 
     /**

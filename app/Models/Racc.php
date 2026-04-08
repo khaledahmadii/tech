@@ -12,6 +12,5 @@ class Racc extends Model
 
     protected $fillable = [
         'nom',
-        'prix'
     ];
 }
