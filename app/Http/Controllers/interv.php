@@ -1,15 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Intervention;
+use App\Models\Racc;
+use App\Models\User;
+
 class interv extends Controller
 {
+
     public static function getAll() {
         $techs = Intervention::join('user', 'intervention.technicien', '=', 'user.id')
-            ->join('prestataire', 'user.presta', '=', 'prestataire.id')
             ->join('racc', 'intervention.type_rac', '=', 'racc.id')
             ->select(
                 'intervention.id as intervention_id',
@@ -17,17 +20,18 @@ class interv extends Controller
                 'intervention.type_rac',
                 'intervention.jeton',
                 'intervention.heure',
-                'intervention.notre',
+                'intervention.notre as notre_grille',
                 'intervention.valid',
                 'intervention.date_int',
                 'user.nom as technicien_nom',
                 'user.prenom as technicien_prenom',
-                'prestataire.id as prestataire_id',
-                'prestataire.nom as prestataire_nom',
-                'racc.nom as racc_nom'
+                'racc.nom as racc_nom'      
             )
+            ->orderBy('intervention.date_int', 'DESC')
             ->get();
-        return $techs;
+        $tech_list = User::all();
+        $racc = Racc::all();
+        return view('intervention.index', compact('techs', 'racc', 'tech_list'));
     }
 
     public static function parmoistech($id) {
@@ -46,18 +50,42 @@ class interv extends Controller
             ->get();
     }
 
-    public static function ajouter(array $data) {
-        return Intervention::create([
+    public static function ajouter(Request $data) {
+        Intervention::create([
             'technicien' => $data['technicien'],
             'type_rac' => $data['type_rac'],
             'jeton' => $data['jeton'],
             'heure' => $data['heure'],
-            'notre' => $data['notre'],
+            'notre' => empty($data['notre']) ? 'non' : $data['notre'],
             'valid' => $data['valid'],
         ]);
+        return redirect()->back()->with('success', 'Intervention ajoutée avec succès');
+
+    }
+
+    public function update(Request $request) {
+        $request->validate([
+            'id' => 'required|integer|exists:intervention,id',
+            'type_rac' => 'nullable|integer|exists:racc,id',
+            'jeton' => 'nullable|string|max:255',
+            'heure' => 'nullable|string|max:255',
+            'notre' => 'nullable|string|max:255',
+            'valid' => 'nullable|in:oui,non',
+        ]);
+
+        Intervention::where('id', $request->id)->update([
+            'type_rac' => $request->type_rac,
+            'jeton' => $request->jeton,
+            'heure' => $request->heure,
+            'notre' => $request->notre,
+            'valid' => $request->valid,
+        ]);
+
+        return redirect()->back()->with('success', 'Intervention modifiée avec succès');
     }
 
     public static function supprimer($id) {
-        return Intervention::destroy($id);
+        Intervention::destroy($id);
+        return redirect()->back()->with('success', 'Intervention supprimée avec succès');
     }
 }
