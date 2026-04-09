@@ -6,15 +6,19 @@ use Illuminate\Http\Request;
 
 class UserAuth extends Controller
 {
-    public function login(Request $request)
+public function login(Request $request)
 {
     $credentials = $request->only('login', 'password');
 
     if (Auth::attempt($credentials)) {
         // ✅ login réussi
-        $request->session()->regenerate();
-
-        return redirect()->intended('/');
+        $request->session()->regenerate();   // ← GARDE CELLE-CI
+        session()->put('user_id', Auth::id());
+        session()->put('user_login', Auth::user()->login); // Stocke le login
+        //  de l'utilisateur dans la session
+        session()->put('user_role', Auth::user()->role); // Stocke le rôle de l'utilisateur dans la session
+        // Force le login explicite
+        return redirect()->intended('/'); // Redirige vers la page d'accueil ou la page précédente
     }
 
     // ❌ login échoué
@@ -23,7 +27,7 @@ class UserAuth extends Controller
     ]);
 }
     public function logout(Request $request)
-    {
+    {   
         Auth::logout();
         
         $request->session()->invalidate();

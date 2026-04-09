@@ -46,7 +46,7 @@
     <ul class="navbar-nav ml-auto">
 
       <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
+        <a class="nav-link" href="/logout" role="button">
           Deconnecter
             <i class="fas fa-sign-out-alt"></i>
         </a>
@@ -70,7 +70,7 @@
           <img src="dist/img/avatar5.png" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{ Auth::check() ? Auth::user()->nom : 'Invité' }}</a>
+          <a href="#" class="d-block">{{ session('user_login') }}</a>
         </div>
       </div>
 
@@ -98,6 +98,7 @@
               </p>
             </a>
           </li>
+          @if (session('user_role') === 'Administrateur')
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
@@ -123,14 +124,6 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="/compte" class="nav-link">
-              <i class="nav-icon fas fa-clipboard"></i>
-              <p>
-                Comptes
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-cog"></i>
               <p>
@@ -154,6 +147,26 @@
               
             </ul>
           </li>
+                    
+
+          <li class="nav-item">
+            <a href="/compte" class="nav-link">
+              <i class="nav-icon fas fa-clipboard"></i>
+              <p>
+                Comptes
+              </p>
+            </a>
+          </li>
+          @else
+          <li class="nav-item">
+            <a href="/profile" class="nav-link">
+              <i class="nav-icon fas fa-clipboard"></i>
+              <p>
+                Mon compte
+              </p>
+            </a>
+          </li>
+          @endif
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

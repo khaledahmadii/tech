@@ -24,6 +24,11 @@ class ProfileController extends Controller
         $presta = Prestataire::all();
         return view('profile.index', compact('users', 'presta'));
     }
+    public function show()
+    {
+        $profile = User::findOrFail(session('user_id'));
+        return view('profile.profile', compact('profile'));
+    }
 
     public function create()
     {
