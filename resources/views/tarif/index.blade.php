@@ -38,6 +38,7 @@
                             <td>
                                 <button type="button" class="btn btn-md btn-primary edit-tarif" data-toggle="modal" data-target="#modal-edit"
                                     data-id="{{ $tarif->id }}"
+                                    data-racc-id="{{ $tarif->id_rac }}"
                                     data-racc="{{ $tarif->rac->nom }}"
                                     data-salarie="{{ $tarif->prix_salarie }}"
                                     data-auto="{{ $tarif->prix_auto }}"
@@ -144,6 +145,7 @@
                   </div>
                   <form id="editInterventionForm" action="{{ route('tarif.update') }}" method="POST">
                     @csrf
+                    <input type="hidden" name="id" id="edit-id">
                     <input type="hidden" name="id_rac" id="edit-racc-id">
                     <div class="modal-body">
                       <div class="form-group">
@@ -195,7 +197,8 @@
 
     $('.edit-tarif').on('click', function () {
       var button = $(this);
-      $('#edit-racc-id').val(button.data('id'));
+      $('#edit-id').val(button.data('id'));
+      $('#edit-racc-id').val(button.data('racc-id'));
       $('#edit-racc').val(button.data('racc'));
       $('#edit-salarie').val(button.data('salarie'));
       $('#edit-auto').val(button.data('auto'));
