@@ -40,6 +40,7 @@ class ProfileController extends Controller
             'role' => request('role'),
             'password' => bcrypt(request('password')),
         ]);
+            Cache::forget('tech_list');
         return redirect()->back()->with('success', 'Compte créé avec succès');
     }
     public function edit(Request $request): View
@@ -62,6 +63,8 @@ class ProfileController extends Controller
             'presta' => request('presta'),
             'role' => request('role'),
         ]);
+        Cache::forget('tech_list');
+
         return redirect()->back()->with('success', 'Compte mis à jour avec succès');
     }
 
@@ -87,6 +90,7 @@ class ProfileController extends Controller
 
 
         user::destroy($id);
+        Cache::forget('tech_list');
         return redirect()->back()->with('success', 'Compte supprimée avec succès');
     }
 }

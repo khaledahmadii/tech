@@ -12,7 +12,7 @@ class interv extends Controller
 {
 
     public static function getAll() {
-            $tech_list = Cache::rememberForever('techniciens_liste', function () {
+            $tech_list = Cache::rememberForever('tech_list', function () {
             return User::where('role', '<>', 'Administrateur')->get()->toArray();
             });
             $racc = Cache::rememberForever('racc', function () {return Racc::all()->toArray();    

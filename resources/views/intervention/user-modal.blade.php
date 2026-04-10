@@ -22,7 +22,7 @@
                                <label for="title" class="form-label">Type de raccordement</label>
                                 <select class="form-select form-control" id="type_rac" name="type_rac" required>
                                     @foreach($racc as $r)
-                                        <option value="{{ $r->id }}">{{ $r->nom }}</option>
+                                        <option value="{{ $r['id'] }}">{{ $r['nom'] }}</option>
                                     @endforeach
 
                                 </select>
@@ -68,7 +68,7 @@
                                 <label for="notre" class="form-label">Grille</label>
                                     <select class="form-select form-control" id="notre" name="notre">
                                     @foreach($tech_list as $t)
-                                    <option value="{{ $t->id }}">{{ $t->nom }} {{ $t->prenom }}</option>
+                                    <option value="{{ $t['id'] }}">{{ $t['nom'] }} {{ $t['prenom'] }}</option>
                                     @endforeach                            
                                     </select>    
                             </div>
@@ -110,7 +110,7 @@
                         <div class="input-group">
                           <select class="form-control" id="edit-type-rac-name" name="type_rac">
                             @foreach($racc as $r)
-                              <option value="{{ $r->id }}">{{ $r->nom }}</option>
+                              <option value="{{ $r['id'] }}">{{ $r['nom'] }}</option>
                             @endforeach
                           </select>
                         </div>

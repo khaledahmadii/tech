@@ -15,6 +15,7 @@ class Raccordement extends Controller
         $racc = racc::create([
             'nom' => request('nom'),
         ]);
+        Cache::forget('racc');
         return redirect()->back()->with('success', 'Raccordement créé avec succès');
     }
     public function update(Request $request) {
@@ -26,11 +27,13 @@ class Raccordement extends Controller
         $racc->update([
             'nom' => $request->nom,
         ]);
+        Cache::forget('racc');
         return redirect()->back()->with('success', 'Raccordement mis à jour avec succès');
     }
 
     public function destroy($id) {
         $racc = racc::find($id);
+        Cache::forget('racc');
         if ($racc) {
             Tarif::where('id_rac', $id)->delete();
             $racc->delete();
