@@ -4,79 +4,60 @@
   <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
   <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endsection
-@if (session('success'))
-    <div class="alert alert-success  alert-dismissible fade show position-fixed p-2" role="alert" style="top: 1rem; right: 1rem; min-width: 250px; max-width: 320px; z-index: 1060; box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);">
-        {{ session('success') }}
-    </div>
-@endif
 @section('content')
 
 
 <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Liste des interventions</h3>
+                <h3 class="card-title">Revenue des Employés</h3>
               </div>
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-lg">
-                  <i class="fas fa-plus me-2"></i> Ajouter une intervention
-                </button>
+
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                      @if (session('user_role') === 'Administrateur')
-                    <th>Technicien</th>
-                    @endif
-                    <th>Id Intervention (Jeton)</th>
-                    <th>Type de Raccordement</th>
-                    <th>Heure</th>
-                    <th>Notre Grille</th>
-                    <th>Validé par l'agent</th>
-                    <th>Date d'ajout</th>
-                    <th>Actions</th>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prenom</th>
+                            <th>Revenu Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($techniciens as $t)
+                        <tr>
+                            <td>{{ $t->nom }}</td>
+                            <td>{{ $t->prenom }}</td>
+                            <td>{{ $t->revenu_total }} Euro</td>
+                            <td>
 
-                  </tr>
-                  </thead>
-                  <tbody>
-                    @foreach($techs as $tech)
-                  <tr>
-                    @if (session('user_role') === 'Administrateur')
-                    <td>{{ $tech->technicien_nom }} {{ $tech->technicien_prenom }}</td>
-                    @endif
-                    <td>{{ $tech->jeton }}</td>
-                    <td>{{ $tech->racc_nom }}</td>
-                    <td>{{ $tech->heure }}</td>
-                    <td>{{ $tech->notre_grille }}</td>
-                    <td>{{ $tech->valid}}</td>
-                    <td>{{ $tech->date_int }}</td>
-                    <td>
-                      <button type="button" class="btn btn-sm btn-primary edit-intervention" data-toggle="modal" data-target="#modal-edit"
-                        data-id="{{ $tech->intervention_id }}"
-                        data-jeton="{{ $tech->jeton }}"
-                        data-type-rac-id="{{ $tech->type_rac }}"
-                        data-heure="{{ $tech->heure }}"
-                        data-notre="{{ $tech->notre_grille }}"
-                        data-valid="{{ $tech->valid }}"
-                      >
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <a class="btn btn-sm btn-danger" href="{{ route('intervention.delete', $tech->intervention_id) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette intervention ?')"><i class="fas fa-trash"></i></a>
-                    </td>   
-                  </tr>
-                  @endforeach
-                  </tbody>
-                  
+                                <a class="btn btn-sm btn-danger" href="{{ route('compte.delete', $t->id) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette intervention ?')">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <!-- Optionnel : tfoot si vous voulez un pied de tableau -->
+                    <tfoot>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prenom</th>
+                            <th>Revenu Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
 
-@if (session('user_role') === 'Administrateur') 
-@include('intervention.admin-modal')
-@else
-@include('intervention.user-modal')
-@endif
+
+
+
+
+
 @endsection
 @section('scripts')
 <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
@@ -132,34 +113,37 @@ var table = $("#example1").DataTable({
     });
     table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-    $('.edit-intervention').on('click', function () {
+    $('.edit-compte').on('click', function () {
       var button = $(this);
-      $('#edit-intervention-id').val(button.data('id'));
-      $('#edit-jeton').val(button.data('jeton'));
-      $('#edit-type-rac-name').val(button.data('type-rac-id')).trigger('change');
-      $('#edit-heure').val(button.data('heure')).trigger('change');
-      $('#edit-notre').val(button.data('notre'));
+      $('#edit-compte-id').val(button.data('id'));
+      $('#edit-login').val(button.data('login'));
+      $('#edit-nom').val(button.data('nom'));
+      $('#edit-prenom').val(button.data('prenom'));
+      $('#edit-presta').val(button.data('presta')).trigger('change');
+      $('#edit-role').val(button.data('role')).trigger('change');
+    });
+
+    $('#modal-password').on('show.bs.modal', function () {
+      $('#password-compte-id').val($('#edit-compte-id').val());
     });
 
 
     $('#extraCheckbox').on('change', function(){
       if (this.checked) {
         $('#extraInputContainer').show();
-        $('#notre').attr('required', true);
+        $('#extra_input').attr('required', true);
       } else {
         $('#extraInputContainer').hide();
-        $('#notre').removeAttr('required').val('');
-
+        $('#extra_input').removeAttr('required').val('');
       }
     });
-
-    // Fermeture automatique de l'alerte success après 4 secondes
     setTimeout(function() {
       $('.alert.alert-success').fadeTo(500, 0).slideUp(500, function(){
         $(this).remove();
       });
-    }, 1000);
-    
+    }, 500);
+
+
   });
 </script>
 @endsection

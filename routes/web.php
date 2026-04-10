@@ -14,6 +14,7 @@ Route::middleware(['check.user.session'])->group(function () {
 
 
 
+
     Route::get('/', [App\Http\Controllers\dash::class, 'index'])->name('dash');
 
     Route::get('/interv', [App\Http\Controllers\interv::class, 'getAll'])->name('intervention');
@@ -39,5 +40,7 @@ Route::middleware(['check.user.session'])->group(function () {
     Route::post('/racc/add', [App\Http\Controllers\Raccordement::class, 'create'])->name('racc.add');
     Route::post('/racc/update', [App\Http\Controllers\Raccordement::class, 'update'])->name('racc.update');
     Route::get('/racc/delete/{id}', [App\Http\Controllers\Raccordement::class, 'destroy'])->name('racc.delete');
+    Route::get('/technicien/employe', [App\Http\Controllers\Technicien::class, 'index_employe'])->name('technicien.employe');
+    Route::get('/technicien/auto', [App\Http\Controllers\Technicien::class, 'index_auto'])->name('technicien.auto');
     });
 });

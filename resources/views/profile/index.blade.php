@@ -257,13 +257,43 @@
 
 <script>
   $(function () {
-    $("#example1").DataTable({
-      "responsive": true, 
-      "lengthChange": false, 
-      "autoWidth": false,
-      "order": [[0, 'asc']],
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+var table = $("#example1").DataTable({
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        dom: 'Bfrtip', // pour afficher les boutons
+        language: {
+            processing:     "Traitement en cours...",
+            search:         "Rechercher :",
+            lengthMenu:     "Afficher _MENU_ entrées",
+            info:           "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+            infoEmpty:      "Aucune donnée disponible",
+            infoFiltered:   "(filtré à partir de _MAX_ entrées totales)",
+            loadingRecords: "Chargement en cours...",
+            zeroRecords:    "Aucun enregistrement trouvé",
+            emptyTable:     "Aucune donnée disponible dans le tableau",
+            paginate: {
+                first:      "Premier",
+                previous:   "Précédent",
+                next:       "Suivant",
+                last:       "Dernier"
+            },
+            aria: {
+                sortAscending:  ": activer pour trier la colonne par ordre croissant",
+                sortDescending: ": activer pour trier la colonne par ordre décroissant"
+            }
+        },
+        buttons: [
+            { extend: 'csv', text: 'CSV' },
+            { extend: 'excel', text: 'Excel' },
+            { extend: 'pdf', text: 'PDF' },
+            { extend: 'print', text: 'Imprimer' },
+        ],
+        columnDefs: [
+            { className: "text-center", targets: "_all" } // centre toutes les colonnes
+        ]
+    });
+    table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
     $('.edit-compte').on('click', function () {
       var button = $(this);

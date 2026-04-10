@@ -6,11 +6,17 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Intervention;
 use App\Models\Racc;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 class interv extends Controller
 {
 
     public static function getAll() {
+            $tech_list = Cache::rememberForever('techniciens_liste', function () {
+            return User::where('role', '<>', 'Administrateur')->get()->toArray();
+            });
+            $racc = Cache::rememberForever('racc', function () {return Racc::all()->toArray();    
+            });
         if (session('user_role') === 'Administrateur') {
 
             $techs = Intervention::join('user', 'intervention.technicien', '=', 'user.id')
@@ -52,9 +58,8 @@ class interv extends Controller
         }
 
         
-        $tech_list = User::where('role', '<>', 'Administrateur')->get();
+        //$tech_list = User::where('role', '<>', 'Administrateur')->get();
      
-        $racc = Racc::all();
         return view('intervention.index', compact('techs', 'racc', 'tech_list'));
     }
 

@@ -31,7 +31,9 @@
 <div class="wrapper">
 
 
-
+                @php
+                    $currentRoute = Route::currentRouteName();
+                @endphp
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
@@ -58,7 +60,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/dash" class="brand-link">
-      <img src="dist/img/logo.jpg" alt="ISKA connect Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img src="{{ asset('dist/img/logo.jpg') }}" alt="ISKA connect Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">ISKA connect</span>
     </a>
 
@@ -67,7 +69,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="dist/img/avatar5.png" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ asset('dist/img/avatar5.png') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">{{ session('user_login') }}</a>
@@ -83,7 +85,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
-            <a href="/dash" class="nav-link active">
+            <a href="/" class="nav-link {{ $currentRoute == 'dash' ? 'active' : '' }}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -91,7 +93,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/interv" class="nav-link">
+            <a href="/interv" class="nav-link {{ $currentRoute == 'intervention' ? 'active' : '' }}">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Interventions
@@ -109,13 +111,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/layout/top-nav.html" class="nav-link">
+                <a href="/technicien/employe" class="nav-link ">
                   <i class="far fa-user nav-icon"></i>
                   <p>Salarié</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
+                <a href="/technicien/auto" class="nav-link">
                   <i class="far fa-user nav-icon"></i>
                   <p>auto-entreproneur</p>
                 </a>
@@ -132,7 +134,7 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
+              <li class="nav-item {{ request()->is('/racc') ? 'active' : '' }}">
                 <a href="/racc" class="nav-link">
                   <i class="fa fa-list nav-icon"></i>
                   <p>Raccordement</p>
@@ -149,8 +151,8 @@
           </li>
                     
 
-          <li class="nav-item">
-            <a href="/compte" class="nav-link">
+          <li class="nav-item ">
+            <a href="/compte" class="nav-link {{ $currentRoute == 'compte' ? 'active' : '' }}">
               <i class="nav-icon fas fa-clipboard"></i>
               <p>
                 Comptes
