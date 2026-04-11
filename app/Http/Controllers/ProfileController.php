@@ -36,6 +36,7 @@ class ProfileController extends Controller
             'login' => request('login'),
             'presta' => request('presta'),
             'role' => request('role'),
+            'grillet' => request('grillet'),
             'password' => bcrypt(request('password')),
         ]);
             Cache::forget('tech_list');
@@ -60,6 +61,7 @@ class ProfileController extends Controller
             'login' => request('login'),
             'presta' => request('presta'),
             'role' => request('role'),
+            'grillet' => request('grillet'),
         ]);
         Cache::forget('tech_list');
 

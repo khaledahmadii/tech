@@ -68,7 +68,7 @@
                                 <label for="notre" class="form-label">Grille</label>
                                     <select class="form-select form-control" id="notre" name="notre">
                                     @foreach($tech_list as $t)
-                                    <option value="{{ $t['id'] }}">{{ $t['nom'] }} {{ $t['prenom'] }}</option>
+                                    <option value="{{ $t['id'] }}">{{ $t['grillet'] }}</option>
                                     @endforeach                            
                                     </select>    
                             </div>

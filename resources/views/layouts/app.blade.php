@@ -161,7 +161,7 @@
           </li>
           @else
           <li class="nav-item">
-            <a href="/profile" class="nav-link">
+            <a href="/profile" class="nav-link {{ $currentRoute == 'profile' ? 'active' : '' }}">
               <i class="nav-icon fas fa-clipboard"></i>
               <p>
                 Mon compte

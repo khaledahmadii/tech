@@ -28,6 +28,7 @@
                             <th>Nom d'utilisateur</th>
                             <th>Prestataire</th>
                             <th>Type</th>
+                            <th>grille</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -39,6 +40,7 @@
                             <td>{{ $user->login }}</td>
                             <td>{{ $user->prestataire->nom }}</td>
                             <td>{{ $user->role }}</td>
+                            <td>{{ $user->grillet }}</td>
                             <td>
                                 <button type="button" class="btn btn-sm btn-primary edit-compte" data-toggle="modal" data-target="#modal-edit"
                                     data-id="{{ $user->id }}"
@@ -46,7 +48,8 @@
                                     data-prenom="{{ $user->prenom }}"
                                     data-login="{{ $user->login }}"
                                     data-presta="{{ $user->presta }}"
-                                    data-role="{{ $user->role }}">
+                                    data-role="{{ $user->role }}"
+                                    data-grille="{{ $user->grillet }}">
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <a class="btn btn-sm btn-danger" href="{{ route('compte.delete', $user->id) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette intervention ?')">
@@ -64,6 +67,7 @@
                             <th>Nom d'utilisateur</th>
                             <th>Prestataire</th>
                             <th>Type</th>
+                            <th>grille</th>
                             <th>Actions</th>
                         </tr>
                     </tfoot>
@@ -118,7 +122,10 @@
                                         <option value="auto-entrepreneur">auto-entrepreneur</option>
                                         <option value="salarie">Salarié</option>
                                 </select>
-
+                            <div class="col-md-6 mb-3">
+                                <label for="title" class="form-label">Grille</label>
+                                <input type="text" class="form-control" id="grille" name="grillet" required>
+                            </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="title" class="form-label">Mot de passe</label>
@@ -188,7 +195,10 @@
                           </select>
                         </div>
                       </div>
-
+                      <div class="form-group">
+                        <label for="edit-grille">Grille</label>
+                        <input type="text" class="form-control" id="edit-grille" name="grillet" placeholder="Grille">
+                      </div>
 
 
 
@@ -303,6 +313,7 @@ var table = $("#example1").DataTable({
       $('#edit-prenom').val(button.data('prenom'));
       $('#edit-presta').val(button.data('presta')).trigger('change');
       $('#edit-role').val(button.data('role')).trigger('change');
+      $('#edit-grille').val(button.data('grille')).trigger('change');
     });
 
     $('#modal-password').on('show.bs.modal', function () {
