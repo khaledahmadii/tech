@@ -1,11 +1,15 @@
 @extends('layouts.app')
 @section('styles')
-  <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}"> 
   <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
   <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endsection
 @section('content')
-
+@error('login')
+    <div class="alert alert-danger alert-dismissible fade show position-fixed p-2" role="alert" style="top: 1rem; right: 1rem; min-width: 250px; max-width: 320px; z-index: 1060; box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);">
+        {{ $message }}
+    </div>
+@enderror
 @if (session('success'))
     <div class="alert alert-success alert-dismissible fade show position-fixed p-2" role="alert" style="top: 1rem; right: 1rem; min-width: 250px; max-width: 320px; z-index: 1060; box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);">
         {{ session('success') }}
@@ -305,7 +309,7 @@ var table = $("#example1").DataTable({
     });
     table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-    $('.edit-compte').on('click', function () {
+    $(document).on('click', '.edit-compte', function () {
       var button = $(this);
       $('#edit-compte-id').val(button.data('id'));
       $('#edit-login').val(button.data('login'));
@@ -331,11 +335,17 @@ var table = $("#example1").DataTable({
       }
     });
     setTimeout(function() {
-      $('.alert.alert-success').fadeTo(500, 0).slideUp(500, function(){
+      $('.alert.alert-success').fadeTo(800, 0).slideUp(800, function(){
         $(this).remove();
       });
     }, 500);
-
+    
+    
+    setTimeout(function() {
+      $('.alert.alert-danger').fadeTo(100, 0).slideUp(100, function(){
+        $(this).remove();
+      });
+    }, 500);
 
   });
 </script>

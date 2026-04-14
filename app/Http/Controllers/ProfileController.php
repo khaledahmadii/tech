@@ -28,17 +28,26 @@ class ProfileController extends Controller
         return view('profile.profile', compact('profile'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $users = User::create([
-            'nom' => request('nom'),
-            'prenom' => request('prenom'),
-            'login' => request('login'),
-            'presta' => request('presta'),
-            'role' => request('role'),
-            'grillet' => request('grillet'),
-            'password' => bcrypt(request('password')),
-        ]);
+        $request->validate([
+        'nom' => 'required|string|max:255',
+        'prenom' => 'required|string|max:255',
+        'login' => 'required|string|max:255|unique:user,login',
+        'password' => 'required|string|min:6',
+    ], [
+        'login.unique' => 'Ce login existe déjà !',
+    ]);
+    
+    User::create([
+    'nom' => $request->nom,
+    'prenom' => $request->prenom,
+    'login' => $request->login,
+    'presta' => $request->presta,
+    'grillet' => $request->grillet,
+    'role' => $request->role,
+    'password' => bcrypt($request->password),
+    ]);
             Cache::forget('tech_list');
         return redirect()->back()->with('success', 'Compte créé avec succès');
     }
@@ -52,20 +61,31 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(request $request)
-    {   
-        $user = user::where('id', request('id'))->first()
-        ->update([
-            'nom' => request('nom'),
-            'prenom' => request('prenom'),
-            'login' => request('login'),
-            'presta' => request('presta'),
-            'role' => request('role'),
-            'grillet' => request('grillet'),
-        ]);
-        Cache::forget('tech_list');
 
-        return redirect()->back()->with('success', 'Compte mis à jour avec succès');
+    public function update(Request $request)
+    {
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'login' => 'required|string|max:255|unique:user,login,' . $request->id,
+        ], [
+            'login.unique' => 'Ce login existe déjà !',
+        ]);
+    
+        $user = User::findOrFail($request->id);
+    
+        $user->update([
+            'nom' => $request->nom,
+            'prenom' => $request->prenom,
+            'login' => $request->login,
+            'presta' => $request->presta,
+            'role' => $request->role,
+            'grillet' => $request->grillet,
+        ]);
+    
+        Cache::forget('tech_list');
+    
+        return back()->with('success', 'Compte mis à jour avec succès');
     }
 
     public function updatePassword(Request $request)

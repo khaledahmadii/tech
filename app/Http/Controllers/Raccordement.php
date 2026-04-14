@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
-use App\Models\racc;
+use App\Models\Racc;
 use App\Models\Tarif;
 class Raccordement extends Controller
 {
